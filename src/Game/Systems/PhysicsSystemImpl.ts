@@ -1,6 +1,13 @@
 /**
  * @inheritdoc
  *
+ * @remarks
+ * It may be necessary to break this class up to provide specific physics
+ * effects for components down the track, however this isn't needed yet for this
+ * simple game.
+ *
+ * eg. GravitySystem, FlightSystem, etc.
+ *
  */
 class PhysicsSystemImpl implements PhysicsSystem {
   constructor(gravity: number) {
@@ -9,18 +16,19 @@ class PhysicsSystemImpl implements PhysicsSystem {
 
   /**
    * @inheritdoc
-   * 
+   *
    */
   SetCurrentTime(t: number): void {
+    Requires.thatArgument(t >= 0, "t", "Current time must greater then zero");
+
     this.currentTime = t;
   }
 
   /**
    * @inheritdoc
-   * 
+   *
    */
   update(entities: Set<Entity>, ecsContainer: EcsContainer): void {
-    // Contract violation check
     Requires.that(this.currentTime > 0, "Current time must be set");
 
     // TODO: implement gravity and other physics for the entities. This should
