@@ -2,7 +2,7 @@
  * Indicates an entity has x and y components in game world space.
  *
  */
-class Placeable implements Component {
+export class Placeable implements Component {
   public constructor(x: number, y: number) {
     this.setPosition(x, y);
   }

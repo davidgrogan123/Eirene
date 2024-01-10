@@ -8,7 +8,7 @@
  * reconsidered.
  *
  */
-class Requires {
+export class Requires {
   /**
    * Check argument predicate result.
    * 

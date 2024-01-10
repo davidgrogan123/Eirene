@@ -13,7 +13,8 @@ class Game {
   constructor(
     physicsSystem: PhysicsSystem,
     renderSystem: System,
-    userInputSystem: System
+    userInputSystem: System,
+    scoringSystem: ScoringSystem
   ) {
     // Construct the plane entity and add behaviour via components
     let plane = this.ecsContainer.createEntity();
@@ -39,9 +40,9 @@ class Game {
     this.ecsContainer.addComponent(boat, new StaticImage("images/boat.png"));
     this.ecsContainer.addComponent(boat, new UserControlable());
 
-    // Keep a reference to the physics system as we will need it later when
-    // updating the frame
+    // Keep a reference to the systems that we need later.
     this.physicsSystem = physicsSystem;
+    this.scoringSystem = scoringSystem;
 
     // Add systems into the ECS container
     this.ecsContainer.addSystem(physicsSystem);
@@ -59,8 +60,14 @@ class Game {
     this.physicsSystem.SetCurrentTime(currentTime);
 
     this.ecsContainer.update();
+
+    if (this.scoringSystem.getCurrentLives() <= 0) {
+
+      // TODO: Game is finished, user has lost the game.
+    }
   }
 
   private ecsContainer: EcsContainer = new EcsContainer();
   private physicsSystem: PhysicsSystem;
+  private scoringSystem: ScoringSystem;
 }

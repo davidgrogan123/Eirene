@@ -6,7 +6,7 @@
  * speed of the fall.
  *
  */
-class Fallable implements Component {
+export class Fallable implements Component {
   constructor(gravityMultiplier: number) {
     this.gravityMultiplier = gravityMultiplier;
   }

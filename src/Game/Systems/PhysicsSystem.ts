@@ -8,4 +8,10 @@ interface PhysicsSystem extends System {
    *
    */
   SetCurrentTime(t: number): void;
+
+  /**
+   * Sets the current time delta within the world.
+   *
+   */
+  SetTimeDelta(t: number): void;
 }

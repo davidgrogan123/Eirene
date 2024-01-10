@@ -1,3 +1,6 @@
+import { Requires } from '../Common/Diagnostics/CodeContract/Requires';
+import { ComponentContainer } from './ComponentContainer';
+
 /**
  * The container for the various game elements; it coordinates entities,
  * components, and systems within the game.
@@ -9,7 +12,7 @@
  * https://en.wikipedia.org/wiki/Entity_component_system
  *
  */
-class EcsContainer {
+export class EcsContainer {
   /**
    * Creates a new entity and returns it.
    *
@@ -20,7 +23,7 @@ class EcsContainer {
   public createEntity(): Entity {
     let entity = this.nextEntityID;
     this.nextEntityID++;
-    this.entities.set(entity, new Set<Component>());
+    this.entities.set(entity, new ComponentContainer());
     return entity;
   }
 
@@ -42,13 +45,17 @@ class EcsContainer {
    *
    */
   public addComponent(entity: Entity, component: Component): void {
-    Requires.thatArgument(
-      this.entities.has(entity),
-      "entity",
-      "Entity must have been added to entities collection"
-    );
-
+    this.validateEntityArgument(entity)
     this.entities.get(entity)!.add(component);
+  }
+
+  /**
+   * Gets components given an entity.
+   *
+   */
+  public getComponents(entity: Entity): ComponentContainer {
+    this.validateEntityArgument(entity)
+    return this.entities.get(entity)!;
   }
 
   /**
@@ -56,12 +63,7 @@ class EcsContainer {
    *
    */
   removeComponent(entity: Entity, componentClass: Function): void {
-    Requires.thatArgument(
-      this.entities.has(entity),
-      "entity",
-      "Entity must have been added to entities collection"
-    );
-
+    this.validateEntityArgument(entity)
     this.entities.get(entity)!.delete(componentClass);
   }
 
@@ -89,7 +91,15 @@ class EcsContainer {
     }
   }
 
-  private entities = new Map<Entity, Set<Component>>();
+  validateEntityArgument(entity: Entity): void {
+    Requires.thatArgument(
+      this.entities.has(entity),
+      "entity",
+      "Entity must have been added to entities collection"
+    );
+  }
+
+  private entities = new Map<Entity, ComponentContainer>();
   private systems = new Map<System, Set<Entity>>();
   private nextEntityID = 0;
   private entitiesToDestroy = new Array<Entity>();
